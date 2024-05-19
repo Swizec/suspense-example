@@ -1,10 +1,11 @@
-import { FC, Suspense } from "react";
+import { FC, Suspense, useState } from "react";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import CakeIcon from "@mui/icons-material/Cake";
 import Table from "@mui/joy/Table";
 import Link from "@mui/joy/Link";
+import CircularProgress from "@mui/joy/CircularProgress";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 type BirthEntry = {
@@ -52,8 +53,9 @@ const Birthdays: FC<{ day: Date }> = ({ day }) => {
                 </tr>
             </thead>
             <tbody>
-                {query.data.map((birth) => (
-                    <tr>
+                {query.data.map((birth, index) => (
+                    // we can use index as key because the list is static
+                    <tr key={index}>
                         <td>
                             <Link
                                 href={birth.pages[0].content_urls.desktop.page}
@@ -71,6 +73,8 @@ const Birthdays: FC<{ day: Date }> = ({ day }) => {
 };
 
 export const WikipediaBirthdays: FC<{ day: Date }> = ({ day }) => {
+    const [showBirthdays, setShowBirthdays] = useState(false);
+
     return (
         <Stack alignItems="center" spacing={2}>
             <Typography level="h2">
@@ -81,13 +85,18 @@ export const WikipediaBirthdays: FC<{ day: Date }> = ({ day }) => {
                 })}
             </Typography>
 
-            <Button startDecorator={<CakeIcon />}>Load birthdays</Button>
+            <Button
+                startDecorator={<CakeIcon />}
+                onClick={() => setShowBirthdays(true)}
+            >
+                Show birthdays
+            </Button>
 
-            <Suspense fallback={<Typography>Loading...</Typography>}>
-                <Birthdays day={day} />
-            </Suspense>
-
-            <Typography>No birthdays found for this day.</Typography>
+            {showBirthdays ? (
+                <Suspense fallback={<CircularProgress />}>
+                    <Birthdays day={day} />
+                </Suspense>
+            ) : null}
         </Stack>
     );
 };
