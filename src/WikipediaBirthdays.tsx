@@ -4,6 +4,7 @@ import Button from "@mui/joy/Button";
 import Stack from "@mui/joy/Stack";
 import CakeIcon from "@mui/icons-material/Cake";
 import Table from "@mui/joy/Table";
+import Link from "@mui/joy/Link";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 type BirthEntry = {
@@ -12,7 +13,16 @@ type BirthEntry = {
     year: number;
 };
 
-type Page = Record<string, unknown>;
+type Page = Record<string, unknown> & {
+    content_urls: { desktop: ContentUrl; mobile: ContentUrl };
+};
+
+type ContentUrl = {
+    page: string;
+    edit: string;
+    revisions: string;
+    talk: string;
+};
 
 const Birthdays: FC<{ day: Date }> = ({ day }) => {
     const query = useSuspenseQuery<BirthEntry[]>({
@@ -44,7 +54,13 @@ const Birthdays: FC<{ day: Date }> = ({ day }) => {
             <tbody>
                 {query.data.map((birth) => (
                     <tr>
-                        <td>{birth.text.split(",")[0]}</td>
+                        <td>
+                            <Link
+                                href={birth.pages[0].content_urls.desktop.page}
+                            >
+                                {birth.text.split(",")[0]}
+                            </Link>
+                        </td>
                         <td>{birth.text.split(",")[1]}</td>
                         <td>{birth.year}</td>
                     </tr>
