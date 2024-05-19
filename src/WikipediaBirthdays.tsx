@@ -25,7 +25,7 @@ type ContentUrl = {
     talk: string;
 };
 
-const Birthdays: FC<{ day: Date }> = ({ day }) => {
+function useBirths(day: Date) {
     const query = useSuspenseQuery<BirthEntry[]>({
         queryKey: ["wikipedia-birthdays", day],
         queryFn: async () => {
@@ -43,6 +43,12 @@ const Birthdays: FC<{ day: Date }> = ({ day }) => {
         },
     });
 
+    return query.data;
+}
+
+const Birthdays: FC<{ day: Date }> = ({ day }) => {
+    const births = useBirths(day);
+
     return (
         <Table>
             <thead>
@@ -53,7 +59,7 @@ const Birthdays: FC<{ day: Date }> = ({ day }) => {
                 </tr>
             </thead>
             <tbody>
-                {query.data.map((birth, index) => (
+                {births.map((birth, index) => (
                     // we can use index as key because the list is static
                     <tr key={index}>
                         <td>
