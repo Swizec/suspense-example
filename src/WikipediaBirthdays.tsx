@@ -20,6 +20,7 @@ type BirthEntry = {
     year: number;
 };
 
+// Simplified Wikipedia page type
 type Page = Record<string, unknown> & {
     content_urls: { desktop: ContentUrl; mobile: ContentUrl };
 };
