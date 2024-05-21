@@ -66,7 +66,7 @@ const Birthdays: FC<{ day: Date }> = ({ day }) => {
     const births = useBirths(day);
 
     return (
-        <Table>
+        <Table data-testid="birthday-list">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -148,6 +148,7 @@ export const WikipediaBirthdays: FC<{ day: Date }> = ({ day }) => {
             <Button
                 startDecorator={<CakeIcon />}
                 onClick={() => setShowBirthdays(true)}
+                data-testid="birthday-button"
             >
                 Show birthdays
             </Button>
