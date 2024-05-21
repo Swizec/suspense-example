@@ -128,6 +128,16 @@ function getPrettyDate(date: Date) {
     });
 }
 
+if (import.meta.vitest) {
+    const { it, expect } = import.meta.vitest;
+
+    it("getPrettyDate returns formatted date", () => {
+        expect(getPrettyDate(new Date("2024-05-20 18:00"))).toBe(
+            "Monday, May 20"
+        );
+    });
+}
+
 export const WikipediaBirthdays: FC<{ day: Date }> = ({ day }) => {
     const [showBirthdays, setShowBirthdays] = useState(false);
 
